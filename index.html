@@ -15,16 +15,6 @@ body {
     flex-direction: column;
 }
 
-/* INPUT OCULT (per teclat mòbil) */
-#hiddenInput {
-    opacity: 0;
-    position: absolute;
-    pointer-events: none;
-    height: 0;
-    width: 0;
-    border: none;
-}
-
 /* HEADER */
 header {
     padding: 20px;
@@ -209,7 +199,7 @@ footer {
     }
 
     #sizeSliderContainer {
-        display: none;
+        display: none; /* Oculta slider en mòbil */
     }
 
     #letterCounter {
@@ -236,9 +226,6 @@ footer {
 </head>
 <body>
 
-<!-- INPUT OCULT -->
-<input id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-
 <header>
     <h1 id="titlePNG"></h1>
 </header>
@@ -264,8 +251,21 @@ footer {
 <!-- INFO SCREEN -->
 <div id="infoScreen">
     <h2>Informació</h2>
-    <p>…</p>
-    <p>…</p>
+    <p>
+        Des de ben petit sempre m'ha agradat jugar amb paperets. 
+        Recordo fer molta papiroflèxia, muntar coses amb quatre plecs, coloraines i molta imaginació. 
+        N'hi ha gent que em diu el nen-vaixells, ja que cada cop que tinc un foli aprofito per fer-ne un. 
+        Sovint, i que no surti d'aquí, agafo papers de les bústies de l'edifici i en faig un per deixar a l'escala. 
+        És estrany tot plegat (mai millor dit), i ho sé.
+    </p>
+    <p>
+        El cas, fa unes setmanes rumiava com fer una altra tipografia experimental i ràpidament vaig pensar en el paper. 
+        Vaig voler, sobretot, mantenir l'essència d'aquest. Crec que es un material tan primigeni i fragil com la vida mateixa. 
+        Per garantir-ho, l'únic destri que vaig fer servir van ser les meves mans, d'aquí la irregularitat de les lletres. 
+        Soc conscient i em preocupa que el fet de que no hi hagi ni cura ni pensament rere l'elaboració faci que el projecte es vegi cutre. 
+        D'avagades em passa això de necessitar que qualcom surti perfectament, però començo adonar-me que estic molt, però molt equivocat. 
+        En aquest cas el tarannà del projecte és ben viu, perquè és l'espontaneïtat del moment.
+    </p>
 </div>
 
 <script>
@@ -281,7 +281,6 @@ const moreInfoBtn = document.getElementById("moreInfoBtn");
 const infoScreen = document.getElementById("infoScreen");
 const footer = document.querySelector("footer");
 const header = document.querySelector("header");
-const hiddenInput = document.getElementById("hiddenInput");
 
 let writing = false;
 let typedText = "";
@@ -310,9 +309,10 @@ titleText.split("").forEach(char => {
         titlePNG.appendChild(spacer);
         return;
     }
+    // ✅ Aquesta línia assegura que totes les lletres PNG es mostrin
     if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
     const img = document.createElement("img");
-    img.src = `images/${char}.png`;   /* IMPORTANT → respecta majúscules */
+    img.src = `images/${char.toUpperCase()}.png`; // majúscules per GitHub
     img.style.width = "40px";
     img.style.height = "40px";
     img.style.opacity = "0.4";
@@ -327,8 +327,6 @@ function startWriting() {
     writing = true;
     sizeSliderContainer.classList.add("show");
     letterCounter.classList.add("show");
-
-    hiddenInput.focus();  // 👉 habilita teclat al mòbil
 }
 
 /* GO HOME */
@@ -385,7 +383,7 @@ function updateOutput() {
         word.split("").forEach(char => {
             if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
             const img = document.createElement("img");
-            img.src = `images/${char}.png`;  /* Manté MAJÚSCULES */
+            img.src = `images/${char.toUpperCase()}.png`; // majúscules per GitHub
             img.style.width = adjustedSize + "px";
             img.style.height = adjustedSize + "px";
             img.style.transform = "scale(0)";
@@ -405,30 +403,11 @@ sizeSlider.addEventListener("input", () => {
     updateOutput();
 });
 
-/* TECLAT — DESKTOP */
+/* TECLAT */
 document.addEventListener("keydown", (e) => {
     if (!writing || infoScreen.classList.contains("show")) return;
-
-    if (e.key === "Backspace") typedText = typedText.slice(0, -1);
-    else if (e.key.length === 1 && typedText.length < maxLetters) typedText += e.key;
-
-    updateOutput();
-});
-
-/* TECLAT — MÒBIL (input ocult) */
-hiddenInput.addEventListener("input", () => {
-    if (!writing) return;
-
-    const value = hiddenInput.value;
-    const newChar = value[value.length - 1];
-
-    if (value === "") {
-        typedText = typedText.slice(0, -1);
-    } else if (newChar && typedText.length < maxLetters) {
-        typedText += newChar;
-    }
-
-    hiddenInput.value = "";
+    if(e.key === "Backspace") typedText = typedText.slice(0, -1);
+    else if(e.key === " " || e.key.length === 1 && typedText.length < maxLetters) typedText += e.key;
     updateOutput();
 });
 
