@@ -309,10 +309,9 @@ titleText.split("").forEach(char => {
         titlePNG.appendChild(spacer);
         return;
     }
-    // ✅ Aquesta línia assegura que totes les lletres PNG es mostrin
     if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
     const img = document.createElement("img");
-    img.src = `images/${char.toUpperCase()}.png`; // majúscules per GitHub
+    img.src = `images/${char.toLowerCase()}.png`;
     img.style.width = "40px";
     img.style.height = "40px";
     img.style.opacity = "0.4";
@@ -383,7 +382,7 @@ function updateOutput() {
         word.split("").forEach(char => {
             if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
             const img = document.createElement("img");
-            img.src = `images/${char.toUpperCase()}.png`; // majúscules per GitHub
+            img.src = `images/${char.toLowerCase()}.png`;
             img.style.width = adjustedSize + "px";
             img.style.height = adjustedSize + "px";
             img.style.transform = "scale(0)";
@@ -395,6 +394,9 @@ function updateOutput() {
             });
         });
     });
+
+    // Ajustament automàtic PNG mòbil
+    adjustLetterSizeMobile();
 }
 
 /* SLIDER */
@@ -436,6 +438,29 @@ moreInfoBtn.addEventListener("click", () => {
         moreInfoBtn.textContent = "Més info";
     }
 });
+
+/* AJUSTAMENT AUTOMÀTIC PNG MÒBIL */
+function adjustLetterSizeMobile() {
+    if(window.innerWidth <= 768){
+        const outputImgs = document.querySelectorAll("#output img");
+        const container = document.querySelector("#output > div");
+        if(!container) return;
+
+        // Nombre màxim de lletres per fila segons amplada
+        const maxLettersPerRow = Math.floor(container.offsetWidth / 30); // 30px mínim per PNG
+        let size = Math.floor(container.offsetWidth / maxLettersPerRow);
+
+        // Aplica la mida als PNG
+        outputImgs.forEach(img => {
+            img.style.width = size + "px";
+            img.style.height = size + "px";
+        });
+    }
+}
+
+window.addEventListener("resize", adjustLetterSizeMobile);
+window.addEventListener("load", adjustLetterSizeMobile);
+document.addEventListener("keydown", adjustLetterSizeMobile);
 </script>
 
 </body>
