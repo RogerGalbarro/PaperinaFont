@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paperina Font</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #409cff;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    padding: 20px;
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+}
+
+header h1 {
+    display: flex;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* BOTÓ MÉS INFO / TORNAR */
+#moreInfoBtn {
+    position: fixed;
+    right: 20px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 100;
+    bottom: 35px;
+}
+
+/* MAIN */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+#clickZone {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#output {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+#output img {
+    margin: 2px;
+    transform: scale(0);
+    transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+#helpText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    z-index: 3;
+    cursor: pointer;
+}
+
+/* SLIDER */
+#sizeSliderContainer {
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    color: white;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#sizeSliderContainer.show {
+    opacity: 1;
+}
+
+#sizeSlider {
+    cursor: pointer;
+    width: 120px;
+    height: 6px;
+    background: white;
+    border-radius: 3px;
+}
+
+/* RANDOM */
+#randomBtn {
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+/* Contador de letras */
+#letterCounter {
+    position: fixed;
+    bottom: 5px;
+    left: 10px;
+    font-size: 14px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#letterCounter.show {
+    opacity: 1;
+}
+
+/* FOOTER */
+footer {
+    text-align: right;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+}
+
+/* INFO SCREEN */
+#infoScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3378ff;
+    display: none;
+    opacity: 0;
+    padding: 40px;
+    padding-top: 80px;
+    transition: opacity 0.4s ease;
+    overflow-y: auto;
+}
+
+#infoScreen.show {
+    display: block;
+    opacity: 1;
+}
+
+#infoScreen p {
+    max-width: 700px;
+    text-align: left;
+    font-size: 18px;
+    line-height: 1.45;
+    color: white;
+    margin-bottom: 20px;
+}
+
+#infoScreen h2 {
+    color: white;
+    font-size: 32px;
+}
+
+/* MOBILE ADAPTATION */
+@media (max-width: 768px) {
+    header {
+        justify-content: center;
+    }
+
+    header h1 {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2px;
+    }
+
+    #sizeSliderContainer {
+        display: none; /* Oculta slider en mòbil */
+    }
+
+    #letterCounter {
+        left: 5px;
+        font-size: 12px;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    #output {
+        max-width: 95%;
+    }
+
+    #clickZone {
+        top: 15%;
+        left: 5%;
+        width: 90%;
+        height: 75%;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1 id="titlePNG"></h1>
+</header>
+
+<div id="moreInfoBtn">Més info</div>
+
+<main>
+    <div id="clickZone"></div>
+    <div id="helpText">Click anywhere and start typing.</div>
+    <div id="output"></div>
+
+    <div id="sizeSliderContainer">
+        <div>Adjust de font size</div>
+        <input type="range" id="sizeSlider" min="50" max="200" value="100">
+        <div id="randomBtn">Random</div>
+    </div>
+
+    <div id="letterCounter">0 / 50</div>
+</main>
+
+<footer>Roger Galbarro Aloy</footer>
+
+<!-- INFO SCREEN -->
+<div id="infoScreen">
+    <h2>Informació</h2>
+    <p>
+        Des de ben petit sempre m'ha agradat jugar amb paperets. 
+        Recordo fer molta papiroflèxia, muntar coses amb quatre plecs, coloraines i molta imaginació. 
+        N'hi ha gent que em diu el nen-vaixells, ja que cada cop que tinc un foli aprofito per fer-ne un. 
+        Sovint, i que no surti d'aquí, agafo papers de les bústies de l'edifici i en faig un per deixar a l'escala. 
+        És estrany tot plegat (mai millor dit), i ho sé.
+    </p>
+    <p>
+        El cas, fa unes setmanes rumiava com fer una altra tipografia experimental i ràpidament vaig pensar en el paper. 
+        Vaig voler, sobretot, mantenir l'essència d'aquest. Crec que es un material tan primigeni i fragil com la vida mateixa. 
+        Per garantir-ho, l'únic destri que vaig fer servir van ser les meves mans, d'aquí la irregularitat de les lletres. 
+        Soc conscient i em preocupa que el fet de que no hi hagi ni cura ni pensament rere l'elaboració faci que el projecte es vegi cutre. 
+        D'avagades em passa això de necessitar que qualcom surti perfectament, però començo adonar-me que estic molt, però molt equivocat. 
+        En aquest cas el tarannà del projecte és ben viu, perquè és l'espontaneïtat del moment.
+    </p>
+</div>
+
+<script>
+const output = document.getElementById("output");
+const helpText = document.getElementById("helpText");
+const clickZone = document.getElementById("clickZone");
+const sizeSliderContainer = document.getElementById("sizeSliderContainer");
+const sizeSlider = document.getElementById("sizeSlider");
+const letterCounter = document.getElementById("letterCounter");
+const randomBtn = document.getElementById("randomBtn");
+const titlePNG = document.getElementById("titlePNG");
+const moreInfoBtn = document.getElementById("moreInfoBtn");
+const infoScreen = document.getElementById("infoScreen");
+const footer = document.querySelector("footer");
+const header = document.querySelector("header");
+
+let writing = false;
+let typedText = "";
+let letterSize = 100;
+const maxLetters = 50;
+
+const customPhrases = [
+    "Wake from your sleep",
+    "Desant les paraules a qualsevol calaix",
+    "Amagant veritats sota un joc de paraules",
+    "Condenado a mirarte desde fuera",
+    "El millor de marxar es tornar",
+    "Sun is down, freezing cold",
+    "Es aixi, feliç i trist",
+    "Tan venut, tan vençut",
+    "Hola, no se que escribir",
+    "La canço que cantava, la cantava des de dins"
+];
+
+/* TITOL PNG */
+const titleText = "Paperina Font";
+titleText.split("").forEach(char => {
+    if (char === " ") {
+        const spacer = document.createElement("div");
+        spacer.style.width = "8px";
+        titlePNG.appendChild(spacer);
+        return;
+    }
+    if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
+    const img = document.createElement("img");
+    img.src = `images/${char.toLowerCase()}.png`;
+    img.style.width = "40px";
+    img.style.height = "40px";
+    img.style.opacity = "0.4";
+    img.style.marginRight = "2px";
+    titlePNG.appendChild(img);
+});
+
+/* START WRITING */
+function startWriting() {
+    helpText.style.display = "none";
+    clickZone.style.display = "none";
+    writing = true;
+    sizeSliderContainer.classList.add("show");
+    letterCounter.classList.add("show");
+}
+
+/* GO HOME */
+function goHome() {
+    typedText = "";
+    output.innerHTML = "";
+    writing = false;
+    helpText.style.display = "block";
+    clickZone.style.display = "block";
+    sizeSliderContainer.classList.remove("show");
+    letterCounter.classList.remove("show");
+}
+
+clickZone.addEventListener("click", startWriting);
+helpText.addEventListener("click", startWriting);
+titlePNG.addEventListener("click", goHome);
+
+/* CALCULATE SIZE */
+function calculateLetterSize() { return letterSize; }
+
+/* UPDATE OUTPUT */
+function updateOutput() {
+    output.innerHTML = "";
+    typedText = typedText.slice(0, maxLetters);
+    letterCounter.textContent = `${typedText.length} / ${maxLetters}`;
+    const adjustedSize = calculateLetterSize();
+
+    const container = document.createElement("div");
+    container.style.display = "flex";
+    container.style.flexWrap = "wrap";
+    container.style.gap = "4px";
+    container.style.justifyContent = "center";
+    output.appendChild(container);
+
+    const words = typedText.split(/(\s+)/);
+
+    words.forEach(word => {
+        if (word.trim() === "") {
+            const spacer = document.createElement("div");
+            spacer.style.width = adjustedSize / 2 + "px";
+            spacer.style.height = adjustedSize + "px";
+            spacer.style.flexShrink = "0";
+            container.appendChild(spacer);
+            return;
+        }
+
+        const wordBox = document.createElement("div");
+        wordBox.style.display = "flex";
+        wordBox.style.flexWrap = "nowrap";
+        wordBox.style.flexShrink = "0";
+        wordBox.style.gap = "4px";
+        container.appendChild(wordBox);
+
+        word.split("").forEach(char => {
+            if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
+            const img = document.createElement("img");
+            img.src = `images/${char.toLowerCase()}.png`;
+            img.style.width = adjustedSize + "px";
+            img.style.height = adjustedSize + "px";
+            img.style.transform = "scale(0)";
+            img.style.transition = "transform 0.2s ease";
+            wordBox.appendChild(img);
+
+            requestAnimationFrame(() => {
+                img.style.transform = "scale(1)";
+            });
+        });
+    });
+
+    // Ajustament automàtic PNG mòbil
+    adjustLetterSizeMobile();
+}
+
+/* SLIDER */
+sizeSlider.addEventListener("input", () => {
+    letterSize = sizeSlider.value;
+    updateOutput();
+});
+
+/* TECLAT */
+document.addEventListener("keydown", (e) => {
+    if (!writing || infoScreen.classList.contains("show")) return;
+    if(e.key === "Backspace") typedText = typedText.slice(0, -1);
+    else if(e.key === " " || e.key.length === 1 && typedText.length < maxLetters) typedText += e.key;
+    updateOutput();
+});
+
+/* REDIMENSIONAR */
+window.addEventListener("resize", () => { if(writing) updateOutput(); });
+
+/* RANDOM */
+randomBtn.addEventListener("click", () => {
+    typedText = customPhrases[Math.floor(Math.random() * customPhrases.length)];
+    updateOutput();
+});
+
+/* INFO SCREEN */
+moreInfoBtn.addEventListener("click", () => {
+    if(!infoScreen.classList.contains("show")) {
+        infoScreen.classList.add("show");
+        header.style.display = "none";
+        footer.style.display = "none";
+        helpText.style.display = "none";
+        moreInfoBtn.textContent = "Tornar";
+    } else {
+        infoScreen.classList.remove("show");
+        header.style.display = "flex";
+        footer.style.display = "block";
+        helpText.style.display = "block";
+        moreInfoBtn.textContent = "Més info";
+    }
+});
+
+/* AJUSTAMENT AUTOMÀTIC PNG MÒBIL */
+function adjustLetterSizeMobile() {
+    if(window.innerWidth <= 768){
+        const outputImgs = document.querySelectorAll("#output img");
+        const container = document.querySelector("#output > div");
+        if(!container) return;
+
+        // Nombre màxim de lletres per fila segons amplada
+        const maxLettersPerRow = Math.floor(container.offsetWidth / 30); // 30px mínim per PNG
+        let size = Math.floor(container.offsetWidth / maxLettersPerRow);
+
+        // Aplica la mida als PNG
+        outputImgs.forEach(img => {
+            img.style.width = size + "px";
+            img.style.height = size + "px";
+        });
+    }
+}
+
+window.addEventListener("resize", adjustLetterSizeMobile);
+window.addEventListener("load", adjustLetterSizeMobile);
+document.addEventListener("keydown", adjustLetterSizeMobile);
+</script>
+
+</body>
+</html>
