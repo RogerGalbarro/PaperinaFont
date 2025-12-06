@@ -78,8 +78,6 @@ main {
     margin: 2px;
     transform: scale(0);
     transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
-    /* Ombra més gran i subtil */
-    filter: drop-shadow(4px 4px 6px rgba(0,0,0,0.2));
 }
 
 #helpText {
@@ -331,7 +329,6 @@ titleText.split("").forEach(char => {
     img.style.height = "40px";
     img.style.opacity = "0.4";
     img.style.marginRight = "2px";
-    img.style.filter = "drop-shadow(4px 4px 6px rgba(0,0,0,0.2))"; // ombra aplicada
     titlePNG.appendChild(img);
 });
 
@@ -403,8 +400,14 @@ function updateOutput() {
             img.style.height = adjustedSize + "px";
             img.style.transform = "scale(0)";
             img.style.transition = "transform 0.2s ease";
-            img.style.filter = "drop-shadow(4px 4px 6px rgba(0,0,0,0.2))"; // ombra aplicada
-            wordBox.appendChild(img);
+
+            // 🌟 Wrapper amb ombra més gran i suau
+            const wrapper = document.createElement("div");
+            wrapper.style.display = "inline-block";
+            wrapper.style.filter = "drop-shadow(6px 6px 12px rgba(0,0,0,0.1))";
+            wrapper.appendChild(img);
+
+            wordBox.appendChild(wrapper);
 
             requestAnimationFrame(() => {
                 img.style.transform = "scale(1)";
