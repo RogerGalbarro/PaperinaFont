@@ -64,6 +64,7 @@ main {
     z-index: 2;
 }
 
+/* ✅ Cambi: overflow visible per evitar tall d'ombres */
 #output {
     display: flex;
     flex-direction: column;
@@ -71,7 +72,7 @@ main {
     align-items: center;
     max-width: 100%;
     max-height: 100%;
-    overflow: hidden;
+    overflow: visible; /* abans era hidden */
 }
 
 #output img {
@@ -398,16 +399,13 @@ function updateOutput() {
             img.src = `images/${char.toLowerCase()}.png`;
             img.style.width = adjustedSize + "px";
             img.style.height = adjustedSize + "px";
+
+            /* ✅ Afegir ombra al PNG */
+            img.style.filter = "drop-shadow(6px 6px 10px rgba(0,0,0,0.15))";
+
             img.style.transform = "scale(0)";
             img.style.transition = "transform 0.2s ease";
-
-            // 🌟 Wrapper amb ombra més gran i suau
-            const wrapper = document.createElement("div");
-            wrapper.style.display = "inline-block";
-            wrapper.style.filter = "drop-shadow(6px 6px 12px rgba(0,0,0,0.1))";
-            wrapper.appendChild(img);
-
-            wordBox.appendChild(wrapper);
+            wordBox.appendChild(img);
 
             requestAnimationFrame(() => {
                 img.style.transform = "scale(1)";
