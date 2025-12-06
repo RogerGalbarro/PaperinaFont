@@ -128,7 +128,7 @@ main {
     margin-top: 12px;
 }
 
-/* Contador */
+/* Contador de letras */
 #letterCounter {
     position: fixed;
     bottom: 5px;
@@ -186,7 +186,7 @@ footer {
     font-size: 32px;
 }
 
-/* MOBILE */
+/* MOBILE ADAPTATION */
 @media (max-width: 768px) {
     header {
         justify-content: center;
@@ -199,7 +199,7 @@ footer {
     }
 
     #sizeSliderContainer {
-        display: none;
+        display: none; /* Oculta slider en mòbil */
     }
 
     #letterCounter {
@@ -251,12 +251,24 @@ footer {
 <!-- INFO SCREEN -->
 <div id="infoScreen">
     <h2>Bla, bla, bla</h2>
-    <p>...</p>
+    <p>
+        Des de ben petit sempre m'ha agradat jugar amb paperets. 
+        Recordo fer molta papiroflèxia, muntar coses amb quatre plecs, coloraines i molta imaginació. 
+        N'hi ha gent que em diu el nen-vaixells, ja que cada cop que tinc un foli aprofito per fer-ne un. 
+        Sovint, i que no surti d'aquí, agafo papers de les bústies de l'edifici i en faig un per deixar a l'escala. 
+        És estrany tot plegat (mai millor dit), i ho sé.
+    </p>
+    <p>
+        El cas, fa unes setmanes rumiava com fer una altra tipografia experimental i ràpidament vaig pensar en el paper. 
+        Es un material tan primigeni i fragil com la vida mateixa. 
+        Per garantir-ho, l'únic destri que vaig fer servir van ser les meves mans, d'aquí la irregularitat de les lletres. 
+        Soc conscient i em preocupa que el fet de que no hi hagi ni cura ni pensament rere l'elaboració faci que el projecte es vegi cutre. 
+        D'avagades em passa això de necessitar que qualcom surti perfectament, però començo adonar-me que estic molt, però molt equivocat. 
+        En aquest cas el tarannà del projecte és ben viu, perquè és l'espontaneïtat del moment.
+    </p>
 </div>
 
 <script>
-/* ——— CODI —————————————————————————————— */
-
 const output = document.getElementById("output");
 const helpText = document.getElementById("helpText");
 const clickZone = document.getElementById("clickZone");
@@ -275,7 +287,61 @@ let typedText = "";
 let letterSize = 100;
 const maxLetters = 50;
 
-/* HOME FUNC */
+const customPhrases = [
+    "Wake from your sleep",
+    "Desant les paraules a qualsevol calaix",
+    "Amagant veritats sota un joc de paraules",
+    "Condenado a mirarte desde fuera",
+    "El millor de marxar es tornar",
+    "Sun is down, freezing cold",
+    "Es aixi, feliç i trist",
+    "Tan venut, tan vençut",
+    "Hola, no se que escribir",
+    "La canço que cantava, la cantava des de dins",
+    "Tirant roses de fogueig",
+    "No es ambicio, es aborriment",
+    "Another day goes by and where was I",
+    "Escribo tu nombre en mi mano",
+    "Le sobra el valor que le falta a mis noches",
+    "No comprende la vida noooo",
+    "washing windows with angelina",
+    "siempre en estado de espera",
+    "nothing here to care about",
+    "no se echarte de menos",
+    "I used to roll the dice",
+    "La drecera que no era",
+    "si us plau que plogui molt fort"
+];
+
+/* TITOL PNG */
+const titleText = "Paperina Font";
+titleText.split("").forEach(char => {
+    if (char === " ") {
+        const spacer = document.createElement("div");
+        spacer.style.width = "8px";
+        titlePNG.appendChild(spacer);
+        return;
+    }
+    if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
+    const img = document.createElement("img");
+    img.src = `images/${char.toLowerCase()}.png`;
+    img.style.width = "40px";
+    img.style.height = "40px";
+    img.style.opacity = "0.4";
+    img.style.marginRight = "2px";
+    titlePNG.appendChild(img);
+});
+
+/* START WRITING */
+function startWriting() {
+    helpText.style.display = "none";
+    clickZone.style.display = "none";
+    writing = true;
+    sizeSliderContainer.classList.add("show");
+    letterCounter.classList.add("show");
+}
+
+/* GO HOME */
 function goHome() {
     typedText = "";
     output.innerHTML = "";
@@ -286,21 +352,103 @@ function goHome() {
     letterCounter.classList.remove("show");
 }
 
-/* ⭐⭐⭐ INFO SCREEN — ARREGLAT ⭐⭐⭐ */
+clickZone.addEventListener("click", startWriting);
+helpText.addEventListener("click", startWriting);
+titlePNG.addEventListener("click", goHome);
+
+/* CALCULATE SIZE */
+function calculateLetterSize() { return letterSize; }
+
+/* UPDATE OUTPUT */
+function updateOutput() {
+    output.innerHTML = "";
+    typedText = typedText.slice(0, maxLetters);
+    letterCounter.textContent = `${typedText.length} / ${maxLetters}`;
+    const adjustedSize = calculateLetterSize();
+
+    const container = document.createElement("div");
+    container.style.display = "flex";
+    container.style.flexWrap = "wrap";
+    container.style.gap = "4px";
+    container.style.justifyContent = "center";
+    output.appendChild(container);
+
+    const words = typedText.split(/(\s+)/);
+
+    words.forEach(word => {
+        if (word.trim() === "") {
+            const spacer = document.createElement("div");
+            spacer.style.width = adjustedSize / 2 + "px";
+            spacer.style.height = adjustedSize + "px";
+            spacer.style.flexShrink = "0";
+            container.appendChild(spacer);
+            return;
+        }
+
+        const wordBox = document.createElement("div");
+        wordBox.style.display = "flex";
+        wordBox.style.flexWrap = "nowrap";
+        wordBox.style.flexShrink = "0";
+        wordBox.style.gap = "4px";
+        container.appendChild(wordBox);
+
+        word.split("").forEach(char => {
+            if (!char.match(/[a-zA-ZñçÑÇ]/)) return;
+            const img = document.createElement("img");
+            img.src = `images/${char.toLowerCase()}.png`;
+            img.style.width = adjustedSize + "px";
+            img.style.height = adjustedSize + "px";
+            img.style.transform = "scale(0)";
+            img.style.transition = "transform 0.2s ease";
+            wordBox.appendChild(img);
+
+            requestAnimationFrame(() => {
+                img.style.transform = "scale(1)";
+            });
+        });
+    });
+
+    adjustLetterSizeMobile();
+}
+
+/* SLIDER */
+sizeSlider.addEventListener("input", () => {
+    letterSize = sizeSlider.value;
+    updateOutput();
+});
+
+/* TECLAT */
+document.addEventListener("keydown", (e) => {
+    if (!writing || infoScreen.classList.contains("show")) return;
+    if(e.key === "Backspace") typedText = typedText.slice(0, -1);
+    else if(e.key === " " || e.key.length === 1 && typedText.length < maxLetters) typedText += e.key;
+    updateOutput();
+});
+
+/* REDIMENSIONAR */
+window.addEventListener("resize", () => { if(writing) updateOutput(); });
+
+/* RANDOM */
+randomBtn.addEventListener("click", () => {
+    typedText = customPhrases[Math.floor(Math.random() * customPhrases.length)];
+    updateOutput();
+});
+
+/* INFO SCREEN */
 moreInfoBtn.addEventListener("click", () => {
     if(!infoScreen.classList.contains("show")) {
 
-        goHome(); // ⭐ NOVA LÍNIA — evita PNGs sota "prem per escriure"
-        
+        goHome();   // ⭐ reinicia el text i evita PNG penjats
         infoScreen.classList.add("show");
         header.style.display = "none";
         footer.style.display = "none";
         helpText.style.display = "none";
 
-        sizeSliderContainer.classList.remove("show"); // ⭐ NOVA LÍNIA — amaga slider
-        letterCounter.classList.remove("show");        // ⭐ NOVA LÍNIA — amaga contador
+        sizeSliderContainer.classList.remove("show");  // ⭐ amaga slider
+        letterCounter.classList.remove("show");        // ⭐ amaga contador
 
         moreInfoBtn.textContent = "Tornar";
+
     } else {
         infoScreen.classList.remove("show");
         header.style.display = "flex";
@@ -309,6 +457,27 @@ moreInfoBtn.addEventListener("click", () => {
         moreInfoBtn.textContent = "Més info";
     }
 });
+
+/* AJUSTAMENT AUTOMÀTIC PNG MÒBIL */
+function adjustLetterSizeMobile() {
+    if(window.innerWidth <= 768){
+        const outputImgs = document.querySelectorAll("#output img");
+        const container = document.querySelector("#output > div");
+        if(!container) return;
+
+        const maxLettersPerRow = Math.floor(container.offsetWidth / 30);
+        let size = Math.floor(container.offsetWidth / maxLettersPerRow);
+
+        outputImgs.forEach(img => {
+            img.style.width = size + "px";
+            img.style.height = size + "px";
+        });
+    }
+}
+
+window.addEventListener("resize", adjustLetterSizeMobile);
+window.addEventListener("load", adjustLetterSizeMobile);
+document.addEventListener("keydown", adjustLetterSizeMobile);
 </script>
 
 </body>
