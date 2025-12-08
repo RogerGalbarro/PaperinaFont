@@ -489,13 +489,10 @@ function updateOutput() {
             img.src = `images/${imgChar}.png`;
             img.style.width = adjustedSize + "px";
             img.style.height = adjustedSize + "px";
-            img.style.transform = "scale(0)";
-            img.style.transition = "transform 0.2s ease";
+            // CANVI PER A QUE LES LLETRES APAREGUIN DIRECTAMENT
+            img.style.transform = "scale(1)";
+            img.style.transition = "none";
             wordBox.appendChild(img);
-
-            requestAnimationFrame(() => {
-                img.style.transform = "scale(1)";
-            });
         });
     });
 
@@ -581,5 +578,3 @@ document.addEventListener("keydown", adjustLetterSizeMobile);
 
 </body>
 </html>
-
-
